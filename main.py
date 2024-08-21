@@ -1,4 +1,4 @@
-from RelayControl import RelayControl
+from relay_control import RelayControl
 
 
 def main():
