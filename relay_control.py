@@ -1,6 +1,5 @@
-import socket
-from models.Rl02_IO import Rl02IO
-from models.Rn62_IO import Rn62IO
+from .models.Rl02_IO import Rl02IO
+from .models.Rn62_IO import Rn62IO
 
 
 class RelayControl:
