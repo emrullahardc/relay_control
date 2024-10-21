@@ -6,7 +6,6 @@ class JetsonEmbed:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
             client.connect((ip, port))
             if relay_number is not None:
-                # Convert relay_number to a string before encoding
                 client.sendall(str(relay_number).encode())
                 print(f"Relay triggered: relay number {relay_number}")
 
