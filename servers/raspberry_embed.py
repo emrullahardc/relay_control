@@ -1,14 +1,13 @@
-import RPi.GPIO as GPIO
+from RPi import GPIO
 import time
 import socket
 
 relay_pins = {
-    1: 23,
+    1: 7,
     2: 24
 }
 
 GPIO.setmode(GPIO.BOARD)
-
 
 def handle_relay(relay_number):
     if relay_number not in relay_pins:
@@ -24,7 +23,7 @@ def handle_relay(relay_number):
     GPIO.output(relay_pin, GPIO.HIGH)
 
     print(f"Relay {relay_number} turned off.")
-    GPIO.cleanup(relay_pin)  # Pinleri temizle
+    GPIO.cleanup(relay_pin)
 
 
 HOST = '0.0.0.0'
@@ -57,5 +56,5 @@ try:
 except KeyboardInterrupt:
     print("Shutting down...")
 finally:
-    GPIO.cleanup()  # GPIO pinlerini temizle
+    GPIO.cleanup()
     print("GPIO pins cleaned up.")
