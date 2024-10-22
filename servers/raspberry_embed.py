@@ -3,8 +3,8 @@ import time
 import socket
 
 relay_pins = {
-    1: 7,
-    2: 24
+    1: 16,
+    2: 18
 }
 
 GPIO.setmode(GPIO.BOARD)
