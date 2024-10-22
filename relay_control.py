@@ -1,6 +1,7 @@
 from .models.Rl02_IO import Rl02IO
 from .models.Rn62_IO import Rn62IO
 from .models.Jetson_Embed import JetsonEmbed
+from .models.Raspberry_Embed import RaspberryEmbed
 
 
 class RelayControl:
@@ -13,6 +14,8 @@ class RelayControl:
             self.relay_instance = Rn62IO()
         elif self.brand == 'jetson-embed':
             self.relay_instance = JetsonEmbed()
+        elif self.brand == 'raspberry-embed':
+            self.relay_instance = RaspberryEmbed()
         else:
             raise ValueError("Unsupported brand for relay control")
 
