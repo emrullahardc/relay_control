@@ -3,7 +3,7 @@ import time
 import socket
 
 relay_pins = {
-    1: 22,
+    1: 23,
     2: 24
 }
 
