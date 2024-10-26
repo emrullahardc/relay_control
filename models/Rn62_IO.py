@@ -3,16 +3,14 @@ import socket
 
 class Rn62IO:
     BINARY_COMMANDS = {
-        '1': bytes([99, 3, 3, 7, 7, 9, 9, 1, 1]),
-        '2': bytes([99, 3, 3, 7, 7, 9, 9, 2, 1]),
+        1: bytes([99, 3, 3, 7, 7, 9, 9, 1, 1]),
+        2: bytes([99, 3, 3, 7, 7, 9, 9, 2, 1]),
     }
 
     def trigger_relays(self, ip, port, relay_number=None, duration=None):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
             client.connect((ip, port))
             if relay_number is not None:
-                if relay_number not in self.BINARY_COMMANDS:
-                    raise ValueError("Invalid relay number")
                 command_to_send = self.BINARY_COMMANDS[relay_number]
             else:
                 commands = [self.BINARY_COMMANDS[key] for key in self.BINARY_COMMANDS]
