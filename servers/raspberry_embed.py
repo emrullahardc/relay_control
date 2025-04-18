@@ -3,27 +3,43 @@ import time
 import socket
 
 relay_pins = {
-    1: 16,
-    2: 18
+    1: [16, "/dev/hidraw0"],
+    2: [18, "/dev/hidraw1"]
 }
 
 GPIO.setmode(GPIO.BOARD)
+
+
+def trigger_gpio(relay_pin):
+    GPIO.setup(relay_pin, GPIO.OUT)
+    GPIO.output(relay_pin, GPIO.LOW)
+    time.sleep(0.3)
+    GPIO.output(relay_pin, GPIO.HIGH)
+    print(f"Toggling relay {relay_number} (GPIO {relay_pin})...")
+    trigger_gpio(relay_pin)
+
+    print(f"Relay {relay_number} turned off.")
+    GPIO.cleanup(relay_pin)
+
+
+def trigger_hid(hidraw_path):
+    with open(hidraw_path, "wb") as device:
+        device.write(bytes([0xA0, 0x01, 0x01, 0xA2]))
+        time.sleep(0.3)
+        print(f"Toggling Usb relay {relay_number}...")
+        device.write(bytes([0xA0, 0x01, 0x00, 0xA1]))
+        print(f"Relay {relay_number} turned off.")
+
 
 def handle_relay(relay_number):
     if relay_number not in relay_pins:
         print(f"Invalid relay number: {relay_number}")
         return
 
-    relay_pin = relay_pins[relay_number]
-    print(f"Toggling relay {relay_number} (GPIO {relay_pin})...")
-
-    GPIO.setup(relay_pin, GPIO.OUT)
-    GPIO.output(relay_pin, GPIO.LOW)
-    time.sleep(0.3)
-    GPIO.output(relay_pin, GPIO.HIGH)
-
-    print(f"Relay {relay_number} turned off.")
-    GPIO.cleanup(relay_pin)
+    gpio_pin = relay_pins[relay_number][0]
+    hidraw_path = relay_pins[relay_number][1]
+    trigger_gpio(gpio_pin)
+    trigger_hid(hidraw_path)
 
 
 HOST = '0.0.0.0'
