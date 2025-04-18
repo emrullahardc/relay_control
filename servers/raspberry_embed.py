@@ -1,3 +1,5 @@
+import os
+
 from RPi import GPIO
 import time
 import socket
@@ -21,12 +23,24 @@ def trigger_gpio(relay_pin):
 
 
 def trigger_hid(hidraw_path):
-    with open(hidraw_path, "wb") as device:
-        device.write(bytes([0xA0, 0x01, 0x01, 0xA2]))
-        time.sleep(0.3)
-        print(f"Toggling Usb relay {relay_number}...")
-        device.write(bytes([0xA0, 0x01, 0x00, 0xA1]))
-        print(f"Relay {relay_number} turned off.")
+    if not os.path.exists(hidraw_path):
+        print(f"HID device not found: {hidraw_path}")
+        return
+
+    try:
+        with open(hidraw_path, "wb") as device:
+            device.write(bytes([0xA0, 0x01, 0x01, 0xA2]))
+            print(f"Toggling USB relay {relay_number}...")
+            time.sleep(0.3)
+
+        with open(hidraw_path, "wb") as device:
+            device.write(bytes([0xA0, 0x01, 0x00, 0xA1]))
+        print("Relay turned off.")
+
+    except PermissionError:
+        print(f"Permission denied while accessing {hidraw_path}. Try running with sudo.")
+    except Exception as e:
+        print(f"Unexpected error while accessing {hidraw_path}: {e}")
 
 
 def handle_relay(relay_number):
