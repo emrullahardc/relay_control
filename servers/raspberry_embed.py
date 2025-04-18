@@ -12,12 +12,10 @@ GPIO.setmode(GPIO.BOARD)
 
 def trigger_gpio(relay_pin):
     GPIO.setup(relay_pin, GPIO.OUT)
-    GPIO.output(relay_pin, GPIO.LOW)
-    time.sleep(0.3)
     GPIO.output(relay_pin, GPIO.HIGH)
     print(f"Toggling relay {relay_number} (GPIO {relay_pin})...")
-    trigger_gpio(relay_pin)
-
+    time.sleep(0.3)
+    GPIO.output(relay_pin, GPIO.LOW)
     print(f"Relay {relay_number} turned off.")
     GPIO.cleanup(relay_pin)
 
